@@ -56,6 +56,24 @@ $(document).ready(function(){
     
   });
 
+
+
+  $(document).on('keydown', function(e) {
+    //new-portflio-modal
+
+    if(e.keyCode === 106) {
+      $('#new-portflio-modal').modal({
+        keyboard: false
+      });
+    }
+
+  });
+
+
+  $('#btn-send-portfolio').on('click', function(e) {
+    savePorfolio();
+  });
+
 })
 
 
@@ -65,7 +83,6 @@ function getAllPortfolios() {
 
         let data = snapshot.val();
         
-        console.log('PORTFOLIO => ', data);
         paintPorfolio(data);
 
     })
@@ -76,7 +93,7 @@ function paintPorfolio(data) {
   <div class="col-sm-4">
       <div class="thumbnail">
         <img src="${data.image || dummyImage}" alt="${data.title}" width="400" height="300">
-        <p><strong>${data.title}</strong></p>
+        <p><a href="${data.client}" target="_blank"><strong>${data.title}</strong></a></p>
         <p>${data.description.substring(0, 30)}</p>
       </div>
     </div>
@@ -101,4 +118,40 @@ function sendMessage(data) {
 
   });
 
+}
+
+
+function savePorfolio() {
+  //btn-send-portfolio
+  const $title = $('#portfoio-title');
+  const $client = $('#portfoio-client');
+  const $description = $('#portfoio-description');
+  const image = document.querySelector('#portfoio-image').files[0];
+
+  if($title.val().length > 5 
+  && $client.val().length > 5 
+  && $description.val().length > 10) {
+
+    portfolioRef.push({
+      title: $title.val(),
+      client: $client.val(),
+      description: $description.val(),
+      image: null
+    },err => {
+      if(err) {
+        console.log('Error while saving portfolio. ', err);
+        
+      } else {
+        console.log('Portfolio saved!');
+        $title.val('');
+        $client.val('');
+        $description.val('');
+        //image.files = null;
+      }
+  
+    });
+  } else {
+    alert('Please fill all porfoio fields!');
+  }
+  
 }

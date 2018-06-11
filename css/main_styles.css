@@ -180,3 +180,7 @@ footer .glyphicon {
   background-image: url("../images/portfoli_2.jpg");
   background-attachment: fixed;
 }
+
+#myModal{
+  margin-top: 50px;
+}
